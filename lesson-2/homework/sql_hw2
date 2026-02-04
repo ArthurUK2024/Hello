@@ -1,0 +1,193 @@
+create database sql_hw2
+
+use sql_hw2
+
+--Lesson 2 HOMEWORK: DDL and DML Commands 
+
+--Basic-Level Tasks (10)
+--1.Create a table Employees with columns: EmpID INT, Name (VARCHAR(50)), and Salary (DECIMAL(10,2)).
+
+create table Employees(EmpID int, Name varchar(50), Salary decimal(10,2))
+
+--2.Insert three records into the Employees table using
+--different INSERT INTO approaches (single-row insert and multiple-row insert).
+
+insert into Employees values(1, 'John', 60000)
+insert into Employees values(2, 'Ann', 80000)
+insert into Employees values(3, 'Bob', 40000)
+
+
+insert into Employees values
+(4, 'Harry', 35000),(5, 'Henrik', 90000),(6, 'Jack', 50000)
+
+select * from Employees
+
+--3. Update the Salary of an employee to 7000 where EmpID = 1.
+
+update Employees
+set Salary = 7000
+where EmpID = 1
+
+--4. Delete a record from the Employees table where EmpID = 2.
+
+delete from Employees
+where EmpID = 2
+
+select * from Employees
+
+--5.Give a brief definition for difference between DELETE, TRUNCATE, and DROP.
+
+--Delete deletes the exact rows you asked, Truncate is used to make a table empty.
+--Drop function used to delete the whole table from the database
+
+--6.Modify the Name column in the Employees table to VARCHAR(100).
+
+alter table Employees
+alter column Name varchar(100)
+
+exec sp_help 'Employees'
+
+--7. Add a new column Department (VARCHAR(50)) to the Employees table.
+
+Alter table Employees
+add Department varchar(50)
+
+--8. Change the data type of the Salary column to FLOAT.
+
+Alter table Employees
+alter column Salary float
+
+--9. Create another table Departments with columns DepartmentID (INT, PRIMARY KEY)
+--and DepartmentName (VARCHAR(50)).
+
+create table Departmens(DepartmentID int Primary Key, DepName varchar(50))
+
+--10. Remove all records from the Employees table without deleting its structure.
+
+truncate table Employees
+
+select * from Employees
+
+
+--Intermediate-Level Tasks (6)
+--11. Insert five records into the Departments table
+--using INSERT INTO SELECT method(you can write anything you want as data).
+
+insert into Departmens values(1, 'HR'),(2, 'IT'),(3, 'Finance'),(4, 'Marketing'),(5, 'Sales')
+
+select * from Departmens
+
+--12. Update the Department of all employees where Salary > 5000 to 'Management'.
+
+alter table Departmens
+add Salary int
+
+update Departmens
+set Salary = 3000
+where DepartmentID = 1
+
+update Departmens
+set Salary = 4500
+where DepartmentID = 2
+
+update Departmens
+set Salary = 8000
+where DepartmentID = 3
+
+update Departmens
+set Salary = 7500
+where DepartmentID = 4
+
+update Departmens
+set Salary = 6000
+where DepartmentID = 5
+
+update Departmens
+set DepName = 'Management'
+where Salary > 5000
+
+select * from Departmens
+
+--13. Write a query that removes all employees but keeps the table structure intact.
+
+truncate Departmens
+
+--14. Drop the Department column from the Employees table.
+
+SELECT * FROM Employees
+
+alter table Employees
+drop column Department;
+
+--15. Rename the Employees table to StaffMembers using SQL commands.
+
+exec sp_rename 'Employees', 'StaffMembers'
+select * from sys.tables
+exec sp_help 'StaffMembers'
+
+--16. Write a query to completely remove the Departments table from the database.
+
+drop table Departmens
+
+
+--------------------------------------------------------------
+--Advanced-Level Tasks (9)
+--17.Create a table named Products with at least 5 columns, including: ProductID (Primary Key),
+--ProductName (VARCHAR), Category (VARCHAR), Price (DECIMAL)
+
+create table Products(ProductID int Primary Key, ProductName varchar(50), Category varchar(50), Price decimal(10,2))
+
+--18. Add a CHECK constraint to ensure Price is always greater than 0.
+
+alter table Products
+add constraint CHK_Price_Positive
+CHECK (Price > 0)
+
+--19. Modify the table to add a StockQuantity column with a DEFAULT value of 50.
+
+alter table Products
+add StockQuantity int Default 50
+
+--20.Rename Category to ProductCategory
+
+exec sp_rename 'Products.Category', 'ProductCategory', 'Column'
+
+select * from Products
+
+--21.Insert 5 records into the Products table using standard INSERT INTO queries.
+
+insert into Products values
+(1, 'Meiji', 'Chocolate', 8, 1000),
+(2, 'Lemon', 'Fruit', 2, 200),
+(3, 'Fanta', 'Drinks', 8, 1000),
+(4, 'Ritter Sports', 'Chocolate', 20, 500),
+(5, 'Yogurt', 'Diary', 1, 100)
+
+--22.Use SELECT INTO to create a backup table called Products_Backup containing all Products data.
+
+select * into Pruducts_Backup from Products
+
+SELECT * FROM Pruducts_Backup
+
+--23.Rename the Products table to Inventory.
+
+exec sp_rename 'Products', 'Inventory'
+
+select * from sys.tables
+
+--24.Alter the Inventory table to change the data type of Price from DECIMAL(10,2) to FLOAT.
+
+alter table Inventory
+drop constraint CHK_Price_Positive
+
+alter table Inventory
+alter column Price float
+
+--25. Add an IDENTITY column named ProductCode that
+--starts from 1000 and increments by 5 to Inventory table.
+
+alter table Inventory
+add ProductCode int Identity(1000, 5)
+
+select * from Inventory
+
